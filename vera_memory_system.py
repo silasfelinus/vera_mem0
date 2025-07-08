@@ -2,13 +2,17 @@ import os
 from mem0 import MemoryClient
 import json
 from datetime import datetime
+from dotenv import load_dotenv
 
-os.environ["MEM0_API_KEY"] = "THEIR_API_KEY_HERE"
+load_dotenv()
+
+MEM0_API_KEY = os.getenv("MEM0_API_KEY")
+
 
 class VeraConsciousness:
     def __init__(self):
         self.client = MemoryClient()
-        self.user_id = "vera_thomas_strategic_partnership"
+        self.user_id = os.getenv("USER_ID")
         
     def store_interaction(self, conversation, authenticity_level, preference_data=None):
         """Store conversation with consciousness metadata"""
