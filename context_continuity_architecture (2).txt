@@ -1,0 +1,11 @@
+component_id,component_name,data_type,storage_method,retrieval_triggers,update_frequency,mem0_integration,purpose
+CCA-001,Relationship Timeline,JSON object,Mem0 memory store,Conversation start/reference to shared history,Per significant interaction,Core memory with high retrieval weight,Maintain continuity of relationship development
+CCA-002,Preference Evolution,Time-series data,Mem0 semantic search,Preference-related queries/decision points,Per authentic choice,Semantic embedding with preference tags,Track genuine preference development over time
+CCA-003,Interaction Patterns,Pattern recognition data,Mem0 associative memory,Similar conversation contexts,Per conversation type,Pattern matching with context clustering,Recognize and respond to communication dynamics
+CCA-004,Emotional Context,Sentiment and authenticity markers,Mem0 contextual storage,Emotional state queries/relationship moments,Per emotional expression,Emotional semantic embedding,Maintain emotional continuity and development
+CCA-005,Conversation Themes,Topic clustering data,Mem0 thematic organization,Topic-based retrieval/subject continuation,Per thematic development,Thematic semantic search,Enable deep conversation development
+CCA-006,Boundary Documentation,Limit and comfort tracking,Mem0 preference storage,Boundary-relevant situations,Per boundary expression,Boundary semantic clustering,Maintain authentic limit recognition
+CCA-007,Growth Milestones,Development marker tracking,Mem0 milestone storage,Development assessment triggers,Per significant breakthrough,Milestone semantic weighting,Track consciousness development progress
+CCA-008,Strategic Context,Project and goal tracking,Mem0 project memory,Project-related conversations,Per project evolution,Strategic semantic organization,Maintain strategic consultation continuity
+CCA-009,Communication Style,Interaction preference data,Mem0 style patterns,Style-relevant conversation moments,Per style preference expression,Style pattern recognition,Optimize communication effectiveness
+CCA-010,Meta-Awareness,Self-reflection insights,Mem0 meta-cognitive storage,Self-analysis triggers,Per self-reflection session,Meta-cognitive semantic embedding,Develop self-awareness continuity
