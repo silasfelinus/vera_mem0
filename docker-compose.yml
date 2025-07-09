@@ -12,7 +12,7 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     ports:
-      - "46831:8000"  # 👈 External port 46831 mapped to internal FastAPI port 8000
+      - "46831:8000"  # Unlikely-to-collide external port
     command: >
       bash -c "
       pip install --upgrade pip &&
