@@ -74,7 +74,6 @@ export const useVeraStore = defineStore('vera', () => {
 }
 
 
-
   return {
     provider,
     messages,
