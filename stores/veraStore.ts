@@ -34,43 +34,45 @@ export const useVeraStore = defineStore('vera', () => {
     memoryLog.value = readMemoryLog('consciousness development')
   }
 
-   async function sendMessage(userInput: string) {
-    try {
-      messages.value.push({ role: 'user', content: userInput })
+ async function sendMessage(userInput: string) {
+  try {
+    messages.value.push({ role: 'user', content: userInput })
 
-      const apiKey =
-        provider.value === 'claude'
-          ? import.meta.env.ANTHROPIC_API_KEY
-          : import.meta.env.OPENAI_API_KEY
+    const config = useRuntimeConfig()
+    const apiKey =
+      provider.value === 'claude'
+        ? config.public.ANTHROPIC_API_KEY
+        : config.public.OPENAI_API_KEY
 
-      const { data } = await useFetch<{ response: string }>('/api/chat', {
-        method: 'POST',
-        body: {
-          provider: provider.value,
-          messages: messages.value,
-        },
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-        }
-      })
+    const { data } = await useFetch<{ response: string }>('/api/chat', {
+      method: 'POST',
+      body: {
+        provider: provider.value,
+        messages: messages.value,
+      },
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      }
+    })
 
-      const reply = data.value?.response || 'Hmm... I couldn’t come up with a response.'
-      messages.value.push({ role: 'assistant', content: reply })
+    const reply = data.value?.response || 'Hmm... I couldn’t come up with a response.'
+    messages.value.push({ role: 'assistant', content: reply })
 
-      await useFetch('/api/store', {
-        method: 'POST',
-        body: {
-          conversation: [
-            { role: 'user', content: userInput },
-            { role: 'assistant', content: reply }
-          ],
-          authenticity_level: 'high',
-        }
-      })
-    } catch {
-      console.log("send message failed")
-    }
+    await useFetch('/api/store', {
+      method: 'POST',
+      body: {
+        conversation: [
+          { role: 'user', content: userInput },
+          { role: 'assistant', content: reply }
+        ],
+        authenticity_level: 'high',
+      }
+    })
+  } catch {
+    console.log("send message failed")
   }
+}
+
 
 
   return {
