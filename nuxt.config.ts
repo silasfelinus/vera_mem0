@@ -10,5 +10,12 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/ui',
     '@pinia/nuxt',
-  ]
+  ],
+  runtimeConfig: {
+  public: {
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
+  }
+}
+
 })
