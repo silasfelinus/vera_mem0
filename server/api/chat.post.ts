@@ -1,5 +1,5 @@
 // /server/api/chat.post.ts
-import { defineEventHandler, readBody, createError } from 'h3'
+import { defineEventHandler, readBody, getHeader, createError } from 'h3'
 import OpenAI from 'openai'
 import { Anthropic } from '@anthropic-ai/sdk'
 
@@ -23,22 +23,29 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Missing provider or messages' })
   }
 
+  // 🔐 Extract API key from Authorization header
+  const authHeader = getHeader(event, 'authorization')
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+
   try {
     if (provider === 'openai') {
-      console.log('🤖 [chat.post] Using OpenAI...')
-      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+      const apiKey = token || process.env.OPENAI_API_KEY
+      if (!apiKey) throw new Error('Missing OpenAI API key')
+      const openai = new OpenAI({ apiKey })
+
       const response = await openai.chat.completions.create({
         model: 'gpt-4-turbo',
         messages,
         temperature: 0.7
       })
-      console.log('✅ [chat.post] OpenAI response received')
       return { response: response.choices[0].message.content }
     }
 
     if (provider === 'claude') {
-      console.log('🧠 [chat.post] Using Claude...')
-      const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+      const apiKey = token || process.env.ANTHROPIC_API_KEY
+      if (!apiKey) throw new Error('Missing Claude API key')
+      const anthropic = new Anthropic({ apiKey })
+
       const response = await anthropic.messages.create({
         model: 'claude-3-opus-20240229',
         messages,
@@ -46,18 +53,14 @@ export default defineEventHandler(async (event) => {
         temperature: 0.7
       })
 
-      console.log('✅ [chat.post] Claude raw response:', JSON.stringify(response, null, 2))
-
       const content = response.content?.find(c => 'text' in c)
       if (!content || typeof content.text !== 'string') {
-        console.error('❌ [chat.post] Claude response had unexpected format:', response.content)
         throw new Error('Claude returned unexpected content format')
       }
 
       return { response: content.text }
     }
 
-    console.error('❌ [chat.post] Unsupported provider:', provider)
     throw createError({ statusCode: 400, message: 'Unsupported provider' })
   } catch (err: unknown) {
     console.error('❌ [chat.post] Chat error:', err)
