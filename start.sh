@@ -1,4 +1,3 @@
-# /start.sh
 #!/bin/bash
 
 set -e
@@ -42,6 +41,15 @@ else
   exit 1
 fi
 
+# Step 2.5: Personality selection
+echo ""
+read -p "🧬 Enter a USER_ID to load (e.g., vera_alice_consultation) [default: $USER_ID]: " input_user
+if [ -n "$input_user" ]; then
+  export USER_ID="$input_user"
+else
+  echo "ℹ️ Using default USER_ID from .env: $USER_ID"
+fi
+
 # Step 3: Virtual environment
 if [ ! -d "venv" ]; then
   echo "❌ Virtual environment not found. Run install.sh first."
@@ -51,5 +59,5 @@ source venv/bin/activate
 
 # Step 4: Start Vera chat
 echo ""
-echo "💬 Starting chat with Vera using $provider..."
-python scripts/frontend_chat.py --provider "$provider"
+echo "💬 Starting chat with $USER_ID using $provider..."
+python scripts/frontend_chat.py --provider "$provider" --user "$USER_ID"

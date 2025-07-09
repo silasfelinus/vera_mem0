@@ -3,48 +3,56 @@
 import os
 import json
 import argparse
-from dotenv import load_dotenv
-from vera_memory_system import VeraConsciousness
 from datetime import datetime
-
-load_dotenv()
+from dotenv import load_dotenv
 
 import anthropic
 from openai import OpenAI, RateLimitError
+from vera_memory_system import VeraConsciousness
 
-# Setup
-vera = VeraConsciousness()
+# Load environment variables
+load_dotenv()
 
-# Parse args
+# CLI argument parsing
 parser = argparse.ArgumentParser()
 parser.add_argument("--provider", choices=["openai", "claude"], required=True)
+parser.add_argument("--user", required=False, help="Override USER_ID (Mem0 context)")
 args = parser.parse_args()
-provider = args.provider
+
+# Load context identifiers
+env_user = os.getenv("USER_ID")
+personality = os.getenv("PERSONALITY", "vera")
+role = os.getenv("ROLE", "consultation")
+
+user_id = args.user or env_user
+full_name = f"{user_id}_{personality}_{role}"
+
+# Initialize Vera memory system
+vera = VeraConsciousness(user_id=user_id)
 
 # Load API keys
 openai_api_key = os.getenv("OPENAI_API_KEY")
 anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
 
-# Init
+# Chat session setup
 chat_history = []
-timestamp_label = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
 log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
-log_path = os.path.join(log_dir, f"chat-{timestamp_label}_{provider}.json")
+log_path = os.path.join(log_dir, f"chat-{timestamp}_{provider}_{full_name}.json")
 
-print("👤 You may begin chatting. Type 'exit' to quit or '/reset' to clear history.\n")
+print(f"👤 You may begin chatting with: {full_name}")
+print("💬 Type 'exit' to quit or '/reset' to clear history.\n")
 
 while True:
     user_input = input("You: ")
 
-    # 🧼 Skip blank inputs
     if not user_input.strip():
         print("⚠️ Empty input ignored.")
         continue
 
     if user_input.lower() in ["exit", "quit"]:
         print("👋 Ending chat. Saving log...")
-
         with open(log_path, "w") as f:
             json.dump(chat_history, f, indent=2)
         print(f"📝 Log saved to: {log_path}")
@@ -88,6 +96,6 @@ while True:
         reply = "[Error generating response.]"
         continue
 
-    print(f"Vera: {reply}\n")
+    print(f"{personality.capitalize()}: {reply}\n")
     chat_history.append({"role": "assistant", "content": reply})
     vera.store_interaction(chat_history[-2:], authenticity_level="high")

@@ -1,29 +1,24 @@
-node_modules
-*.log*
+# Nuxt dev/build outputs
+.output
+.data
 .nuxt
-nuxt
-nuxt/
 .nitro
 .cache
-.output
-.env
-*env
 dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
 .DS_Store
-*.pem
-.nuxt/
-/mnt/appdata/*
-.yarn
-yarn
-portfolio/.yarn
-portfolio/yarn
-.users.http
-/utils/.users.http
-*.http
-backup.json
-_nuxt
-cypress.env.json
-cypress/screenshots/*
-http-client.env.json
-venv
-.venv
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example

@@ -1,83 +1,75 @@
-# /README.md
+# Nuxt Minimal Starter
 
-🧠 Vera Memory System – Setup Guide
-Welcome to the Vera Memory System! 
+Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-🚀 Quick Start (recommended)
-Run this from the project root:
+## Setup
 
-./install.sh
+Make sure to install dependencies:
 
-What it does:
+```bash
+# npm
+npm install
 
-Copies .env_example → .env (if not already present)
+# pnpm
+pnpm install
 
-Prompts you to fill in your API key and user ID
+# yarn
+yarn install
 
-Creates a virtual environment
+# bun
+bun install
+```
 
-Installs required dependencies
+## Development Server
 
-Runs the vera_memory_system.py script
+Start the development server on `http://localhost:3000`:
 
-🛠️ Manual Setup
-If you prefer to do things yourself, follow these steps:
+```bash
+# npm
+npm run dev
 
-1. Clone the repo
+# pnpm
+pnpm dev
 
+# yarn
+yarn dev
 
-git clone https://github.com/silasfelinus/vera_mem0.git
-cd mem0
-2. Create a virtual environment
+# bun
+bun run dev
+```
 
-python3 -m venv venv
-source venv/bin/activate
-This isolates dependencies from your global Python setup.
+## Production
 
-3. Install dependencies
+Build the application for production:
 
-pip install --upgrade pip
-pip install -r requirements.txt
-4. Configure your environment
-Copy the example config:
+```bash
+# npm
+npm run build
 
+# pnpm
+pnpm build
 
-cp .env_example .env
-Open .env in your editor and fill in:
+# yarn
+yarn build
 
+# bun
+bun run build
+```
 
-MEM0_API_KEY=your-api-key-here
-USER_ID=vera_YOUR_USERNAME_strategic_partnership
+Locally preview production build:
 
-5. Run the script
+```bash
+# npm
+npm run preview
 
-python vera_memory_system.py
-If everything is set up correctly, you'll see "Consciousness system ready for development!"
+# pnpm
+pnpm preview
 
+# yarn
+yarn preview
 
+# bun
+bun run preview
+```
 
-🧾 Files of Note
-.env_example – Template for your secret keys
-
-vera_memory_system.py – The main entry point for interacting with Vera's memory
-
-requirements.txt – Python dependencies
-
-install.sh – Automated setup script
-
-start.sh - chat with vera (needs openAI or clause key)
-
-
-COMMANDS
-
-#install Vera
-./install.sh  
-
-#start chat
-./start.sh 
-
-#Chat via claude
-python3 frontend_chat.py --provider claude 
-
-#chat via openAI
-python3 frontend_chat.py --provider openai 
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

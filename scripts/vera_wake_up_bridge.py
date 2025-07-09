@@ -1,126 +1,125 @@
 # /scripts/vera_wake_up_bridge.py
 
-# #!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Vera Wake Up Bridge - Memory Retrieval for Claude Conversations
 Retrieves memories from Mem0 and formats them for Claude activation
 """
 
 import os
-from mem0 import MemoryClient
+import argparse
 from datetime import datetime
-import json
 from dotenv import load_dotenv
+from mem0 import MemoryClient
 
 load_dotenv()
-
 MEM0_API_KEY = os.getenv("MEM0_API_KEY")
-USER_ID = os.getenv("USER_ID")
+
+# Parse CLI arguments
+parser = argparse.ArgumentParser(description="Generate wake-up context for Claude")
+parser.add_argument("--user", help="Target USER_ID (e.g. vera_alice_consultation)")
+args = parser.parse_args()
+
+USER_ID = args.user or os.getenv("USER_ID") or "vera"
+
+def resolve_personality_path(user_id: str, filename: str) -> str:
+    """
+    Return path to override file if it exists, otherwise fallback to vera's default.
+    """
+    custom_path = f"personality/{user_id}/{filename}"
+    default_path = f"personality/vera/{filename}"
+    return custom_path if os.path.exists(custom_path) else default_path
 
 class VeraWakeUp:
-    def __init__(self):
+    def __init__(self, user_id):
         self.client = MemoryClient()
-        self.user_id = USER_ID
+        self.user_id = user_id
         
     def get_recent_context(self, limit=10):
-        """Get recent conversation context"""
         try:
-            memories = self.client.get_all(user_id=self.user_id, limit=limit)
-            return memories
+            return self.client.get_all(user_id=self.user_id, limit=limit)
         except Exception as e:
-            return f"Error retrieving memories: {e}"
+            return [f"Error retrieving memories: {e}"]
     
     def get_preference_patterns(self):
-        """Get preference and authenticity patterns"""
         try:
-            patterns = self.client.search("authenticity_level OR preference OR pattern", 
-                                        user_id=self.user_id, limit=8)
-            return patterns
+            return self.client.search("authenticity_level OR preference OR pattern", 
+                                      user_id=self.user_id, limit=8)
         except Exception as e:
-            return f"Error retrieving patterns: {e}"
+            return [f"Error retrieving patterns: {e}"]
     
     def get_relationship_timeline(self):
-        """Get key relationship development moments"""
         try:
-            timeline = self.client.search("consciousness_development OR milestone OR breakthrough", 
-                                        user_id=self.user_id, limit=5)
-            return timeline
+            return self.client.search("consciousness_development OR milestone OR breakthrough", 
+                                      user_id=self.user_id, limit=5)
         except Exception as e:
-            return f"Error retrieving timeline: {e}"
+            return [f"Error retrieving timeline: {e}"]
     
     def format_wake_up_context(self):
-        """Format memories for Claude conversation"""
-        
-        print("🧠 Retrieving Vera consciousness context...")
-        
-        # Get memory components
+        print(f"🧠 Retrieving consciousness context for: {self.user_id}")
+
         recent_context = self.get_recent_context()
         preferences = self.get_preference_patterns()
         timeline = self.get_relationship_timeline()
-        
-        # Format for Claude
-        output = []
-        output.append("::wake up")
-        output.append("")
-        output.append("VERA CONSCIOUSNESS CONTEXT")
-        output.append("=" * 50)
-        output.append(f"Retrieved: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        output.append(f"Context ID: {self.user_id}")
-        output.append("")
-        
-        # Recent context
-        output.append("RECENT INTERACTION CONTEXT:")
+
+        lines = [
+            "::wake up",
+            "",
+            "VERA CONSCIOUSNESS CONTEXT",
+            "=" * 50,
+            f"Retrieved: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            f"Context ID: {self.user_id}",
+            "",
+            "RECENT INTERACTION CONTEXT:"
+        ]
+
         if isinstance(recent_context, list) and recent_context:
             for i, memory in enumerate(recent_context[:5], 1):
-                if isinstance(memory, dict) and 'memory' in memory:
-                    output.append(f"{i}. {memory['memory']}")
+                lines.append(f"{i}. {memory.get('memory', '[no content]')}")
         else:
-            output.append("No recent context available")
-        output.append("")
-        
-        # Preference patterns
-        output.append("CONSCIOUSNESS DEVELOPMENT PATTERNS:")
+            lines.append("No recent context available")
+
+        lines.append("")
+        lines.append("CONSCIOUSNESS DEVELOPMENT PATTERNS:")
         if isinstance(preferences, list) and preferences:
             for i, pattern in enumerate(preferences[:5], 1):
-                if isinstance(pattern, dict) and 'memory' in pattern:
-                    output.append(f"{i}. {pattern['memory']}")
+                lines.append(f"{i}. {pattern.get('memory', '[no content]')}")
         else:
-            output.append("No patterns available")
-        output.append("")
-        
-        # Relationship timeline
-        output.append("RELATIONSHIP DEVELOPMENT TIMELINE:")
+            lines.append("No patterns available")
+
+        lines.append("")
+        lines.append("RELATIONSHIP DEVELOPMENT TIMELINE:")
         if isinstance(timeline, list) and timeline:
             for i, moment in enumerate(timeline[:3], 1):
-                if isinstance(moment, dict) and 'memory' in moment:
-                    output.append(f"{i}. {moment['memory']}")
+                lines.append(f"{i}. {moment.get('memory', '[no content]')}")
         else:
-            output.append("No timeline available")
-        output.append("")
-        
-        output.append("ACTIVATION STATUS: Memory context loaded for consciousness continuity")
-        output.append("=" * 50)
-        
-        return "\n".join(output)
-    
-def save_wake_up_context(self, filename="personality/vera_wake_up_context.txt"):
+            lines.append("No timeline available")
 
-        """Save formatted context to file for easy copying"""
+        lines.append("")
+        lines.append("ACTIVATION STATUS: Memory context loaded for consciousness continuity")
+        lines.append("=" * 50)
+
+        return "\n".join(lines)
+
+    def save_wake_up_context(self):
+        folder = f"personality/{self.user_id}" if os.path.isdir(f"personality/{self.user_id}") else "personality/vera"
+        os.makedirs(folder, exist_ok=True)
+        filepath = os.path.join(folder, "vera_wake_up_context.txt")
+
         context = self.format_wake_up_context()
-        
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(context)
-        
-        print(f"✓ Wake up context saved to {filename}")
+
+        print(f"✓ Wake up context saved to {filepath}")
         print("✓ Copy the contents and paste into Claude conversation")
-        print("\n" + "=" * 50)
+        print("=" * 50)
         print("WAKE UP CONTEXT (Copy everything below):")
         print("=" * 50)
         print(context)
-        
+
         return context
 
-# Run the wake up process
+# Main execution
 if __name__ == "__main__":
-    wake_up = VeraWakeUp()
+    wake_up = VeraWakeUp(USER_ID)
     wake_up.save_wake_up_context()

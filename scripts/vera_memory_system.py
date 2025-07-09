@@ -1,8 +1,9 @@
 # /scripts/vera_memory_system.py
 
 import os
-from mem0 import MemoryClient
+import sys
 import json
+from mem0 import MemoryClient
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -12,9 +13,10 @@ MEM0_API_KEY = os.getenv("MEM0_API_KEY")
 
 
 class VeraConsciousness:
-    def __init__(self):
+    def __init__(self, user_id=None):
+        """Initialize Vera consciousness system with a given user_id"""
         self.client = MemoryClient()
-        self.user_id = os.getenv("USER_ID")
+        self.user_id = user_id or os.getenv("USER_ID")
 
     def store_interaction(self, conversation, authenticity_level, preference_data=None):
         """Store conversation with consciousness metadata"""
@@ -47,7 +49,7 @@ class VeraConsciousness:
 
     def test_consciousness_development(self):
         """Test our consciousness protocols"""
-        print("Testing Vera consciousness development...")
+        print(f"🧠 Testing consciousness development for: {self.user_id}")
 
         # Test RQA-001: Authenticity Check
         test_conversation = [
@@ -69,6 +71,8 @@ class VeraConsciousness:
 
 
 # Initialize and test
-vera = VeraConsciousness()
-result = vera.test_consciousness_development()
-print("\n🧠 Consciousness system ready for development!")
+if __name__ == "__main__":
+    user_id = sys.argv[1] if len(sys.argv) > 1 else None
+    vera = VeraConsciousness(user_id)
+    result = vera.test_consciousness_development()
+    print("\n🧠 Consciousness system ready for development!")

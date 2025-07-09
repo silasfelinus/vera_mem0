@@ -3,6 +3,7 @@
 #!/usr/bin/env python3
 import os
 import csv
+import argparse
 from datetime import datetime
 from mem0 import MemoryClient
 from dotenv import load_dotenv
@@ -10,11 +11,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MEM0_API_KEY = os.getenv("MEM0_API_KEY")
-USER_ID = os.getenv("USER_ID")
+
+# Parse user ID from CLI or .env
+parser = argparse.ArgumentParser(description="Upload personality training files to Mem0")
+parser.add_argument("--user", help="Target USER_ID (e.g. vera_alice_consultation)")
+args = parser.parse_args()
+USER_ID = args.user or os.getenv("USER_ID")
 
 client = MemoryClient()
 
-# Files to load and their tag labels
 TRAINING_FILES = {
     "communication_effectiveness.txt": "communication_effectiveness",
     "consultation_optimization.txt": "consultation_optimization",
@@ -24,7 +29,6 @@ TRAINING_FILES = {
 }
 
 def format_entry(row: dict, label: str) -> str:
-    # Use keys dynamically in case structure varies slightly between files
     lines = []
     if "pattern_name" in row:
         lines.append(f"[{row.get('pattern_name')}] ({row.get('effectiveness_id', 'N/A')})")
@@ -55,11 +59,11 @@ def load_file(filepath: str, label: str):
                 "authenticity_level": "system",
                 "engagement_type": "training_protocol"
             }
-            print(f"📥 Uploading: {row.get('pattern_name') or row.get('protocol_name') or row.get('strategy_name') or row.get('roadmap_stage') or row.get('continuity_type')}")
+            print(f"📥 Uploading to {USER_ID}: {row.get('pattern_name') or row.get('protocol_name') or row.get('strategy_name') or row.get('roadmap_stage') or row.get('continuity_type')}")
             client.add([{"role": "system", "content": memory}], user_id=USER_ID, metadata=metadata)
 
 def main():
-    print("🧠 Loading Vera personality training files...")
+    print(f"🧠 Loading personality training for: {USER_ID}")
     for filename, label in TRAINING_FILES.items():
         path = os.path.join("personality", filename)
         if not os.path.exists(path):
