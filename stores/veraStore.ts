@@ -1,5 +1,5 @@
 // /stores/veraStore.ts
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { readMemoryLog, getIntroContext } from '@/stores/helpers/veraHelper'
 
@@ -64,7 +64,7 @@ async function initializeConversation() {
     })
   }
 
-  onMounted(() => initializeConversation())
+
 
   return {
     provider,
