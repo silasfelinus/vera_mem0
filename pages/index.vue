@@ -2,8 +2,7 @@
   <div class="space-y-6 p-8">
     <h1 class="text-3xl font-bold">🧠 Vera Dashboard</h1>
 
-    <vera-chat />
-    <memory-log />
+    <provider-toggle />
   </div>
 </template>
 

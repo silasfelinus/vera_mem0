@@ -17,16 +17,22 @@ export const useVeraStore = defineStore('vera', () => {
     memoryLog.value = readMemoryLog(query)
   }
 
-  async function initializeConversation() {
-    if (initialized.value) return
-    initialized.value = true
+async function initializeConversation() {
+  if (initialized.value) return
+  initialized.value = true
 
-    // Load local context and add as system message
-    const context = await getIntroContext()
-    if (context) {
-      messages.value.push({ role: 'assistant', content: context })
-    }
+  // ✅ Set default provider if not set
+  if (provider.value === 'none') {
+    provider.value = 'openai'
   }
+
+  // Load local context and add as system message
+  const context = await getIntroContext()
+  if (context) {
+    messages.value.push({ role: 'assistant', content: context })
+  }
+}
+
 
   async function sendMessage(userInput: string) {
     messages.value.push({ role: 'user', content: userInput })

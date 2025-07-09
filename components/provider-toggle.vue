@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { useVeraStore } from '@/stores/veraStore'
 
 const store = useVeraStore()
@@ -26,11 +25,4 @@ function cycleProvider() {
 
   store.setProvider(next)
 }
-
-onMounted(() => {
-  // Default to OpenAI if none set
-  if (store.provider === 'none') {
-    store.setProvider('openai')
-  }
-})
 </script>
