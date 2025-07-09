@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  vera:
+    container_name: vera_memory_system
+    image: python:3.11-slim
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./vera:/app
+      - ./vera/.env:/app/.env:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "46831:8000"  # 👈 External port 46831 mapped to internal FastAPI port 8000
+    command: >
+      bash -c "
+      pip install --upgrade pip &&
+      pip install -r requirements.txt &&
+      uvicorn api:app --host 0.0.0.0 --port 8000
+      "
