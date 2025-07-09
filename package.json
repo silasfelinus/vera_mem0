@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
 "scripts": {
-  "dev": "nuxt dev",
+  "dev": "nuxt dev --host",
   "build": "nuxt build",
   "lint": "npm run lint:js && npm run lint:prettier",
   "lint:js": "eslint .",
