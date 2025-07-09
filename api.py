@@ -29,3 +29,11 @@ async def store_interaction(request: Request):
 @app.get("/recall")
 def recall_context(query: str):
     return vera.recall_context(query)
+
+@app.get("/provider")
+def get_provider():
+    if os.getenv("ANTHROPIC_API_KEY"):
+        return {"provider": "claude"}
+    elif os.getenv("OPENAI_API_KEY"):
+        return {"provider": "openai"}
+    return {"provider": "none"}
