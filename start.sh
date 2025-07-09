@@ -20,7 +20,17 @@ fi
 source .env
 
 # Step 2: Provider selection
-if [ -n "$OPENAI_API_KEY" ]; then
+if [ -n "$OPENAI_API_KEY" ] && [ -n "$ANTHROPIC_API_KEY" ]; then
+  echo "🤖 Both OpenAI and Claude API keys detected."
+  echo "Choose a provider:"
+  select provider in "openai" "claude"; do
+    if [[ "$provider" == "openai" || "$provider" == "claude" ]]; then
+      break
+    else
+      echo "❌ Invalid selection. Please choose 1 or 2."
+    fi
+  done
+elif [ -n "$OPENAI_API_KEY" ]; then
   provider="openai"
   echo "✨ OpenAI API detected"
 elif [ -n "$ANTHROPIC_API_KEY" ]; then

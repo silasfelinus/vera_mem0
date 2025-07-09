@@ -63,3 +63,19 @@ requirements.txt – Python dependencies
 
 install.sh – Automated setup script
 
+start.sh - chat with vera (needs openAI or clause key)
+
+
+COMMANDS
+
+#install Vera
+./install.sh  
+
+#start chat
+./start.sh 
+
+#Chat via claude
+python3 frontend_chat.py --provider claude 
+
+#chat via openAI
+python3 frontend_chat.py --provider openai 
