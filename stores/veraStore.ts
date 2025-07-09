@@ -17,26 +17,21 @@ export const useVeraStore = defineStore('vera', () => {
     memoryLog.value = readMemoryLog(query)
   }
 
-async function initializeConversation() {
-  if (initialized.value || !import.meta.client) return
-  initialized.value = true
+  async function initializeConversation() {
+    if (initialized.value || !import.meta.client) return
+    initialized.value = true
 
-  // Default provider
-  if (provider.value === 'none') {
-    provider.value = 'openai'
+    if (provider.value === 'none') {
+      provider.value = 'openai'
+    }
+
+    const context = await getIntroContext()
+    if (context) {
+      messages.value.push({ role: 'assistant', content: context })
+    }
+
+    memoryLog.value = readMemoryLog('consciousness development')
   }
-
-  // Load intro context
-  const context = await getIntroContext()
-  if (context) {
-    messages.value.push({ role: 'assistant', content: context })
-  }
-
-  // Load memory log automatically
-  memoryLog.value = readMemoryLog('consciousness development')
-}
-
-
 
   async function sendMessage(userInput: string) {
     messages.value.push({ role: 'user', content: userInput })
@@ -64,16 +59,14 @@ async function initializeConversation() {
     })
   }
 
-
-
   return {
     provider,
     messages,
     memoryLog,
+    initialized,
     setProvider,
     recallContext,
     sendMessage,
-    initializeConversation
+    initializeConversation,
   }
 })
-
