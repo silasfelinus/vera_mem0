@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
       const anthropic = new Anthropic({ apiKey })
 
       const response = await anthropic.messages.create({
-        model: 'claude-3-opus-20240229',
+        model: 'claude-opus-4-20250514',
         messages,
         max_tokens: 1024,
         temperature: 0.7
