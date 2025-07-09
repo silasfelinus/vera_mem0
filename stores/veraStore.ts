@@ -34,15 +34,23 @@ export const useVeraStore = defineStore('vera', () => {
     memoryLog.value = readMemoryLog('consciousness development')
   }
 
-  async function sendMessage(userInput: string) {
+   async function sendMessage(userInput: string) {
     try {
       messages.value.push({ role: 'user', content: userInput })
+
+      const apiKey =
+        provider.value === 'claude'
+          ? import.meta.env.ANTHROPIC_API_KEY
+          : import.meta.env.OPENAI_API_KEY
 
       const { data } = await useFetch<{ response: string }>('/api/chat', {
         method: 'POST',
         body: {
           provider: provider.value,
           messages: messages.value,
+        },
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
         }
       })
 
@@ -60,9 +68,10 @@ export const useVeraStore = defineStore('vera', () => {
         }
       })
     } catch {
-            console.log("send message failed")
+      console.log("send message failed")
     }
   }
+
 
   return {
     provider,
