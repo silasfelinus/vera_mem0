@@ -26,8 +26,8 @@ def resolve_personality_path(user_id: str, filename: str) -> str:
     """
     Return path to override file if it exists, otherwise fallback to vera's default.
     """
-    custom_path = f"personality/{user_id}/{filename}"
-    default_path = f"personality/vera/{filename}"
+    custom_path = f"public/personality/{user_id}/{filename}"
+    default_path = f"public/personality/vera/{filename}"
     return custom_path if os.path.exists(custom_path) else default_path
 
 class VeraWakeUp:
@@ -102,7 +102,7 @@ class VeraWakeUp:
         return "\n".join(lines)
 
     def save_wake_up_context(self):
-        folder = f"personality/{self.user_id}" if os.path.isdir(f"personality/{self.user_id}") else "personality/vera"
+        folder = f"public/personality/{self.user_id}" if os.path.isdir(f"public/personality/{self.user_id}") else "public/personality/vera"
         os.makedirs(folder, exist_ok=True)
         filepath = os.path.join(folder, "vera_wake_up_context.txt")
 
