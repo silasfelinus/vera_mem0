@@ -12,10 +12,10 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     ports:
-      - "46831:8000"  # Unlikely-to-collide external port
+      - "46831:8000"
     command: >
       bash -c "
-      pip install --upgrade pip &&
-      pip install -r requirements.txt &&
+      chmod +x install.sh &&
+      ./install.sh &&
       uvicorn api:app --host 0.0.0.0 --port 8000
       "
