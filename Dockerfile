@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM cgr.dev/chainguard/node:20-dev
 
 WORKDIR /vera
 
@@ -9,3 +9,4 @@ RUN npm install
 EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
+
