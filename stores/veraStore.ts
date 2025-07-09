@@ -1,42 +1,70 @@
 // /stores/veraStore.ts
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { defineStore } from 'pinia'
-
-type MemoryItem = {
-  memory?: string
-}
+import { readMemoryLog, getIntroContext } from '@/stores/helpers/veraHelper'
 
 export const useVeraStore = defineStore('vera', () => {
   const provider = ref<'openai' | 'claude' | 'none'>('none')
   const messages = ref<{ role: 'user' | 'assistant', content: string }[]>([])
   const memoryLog = ref<string[]>([])
+  const initialized = ref(false)
 
-  async function fetchProvider() {
-    const { data } = await useFetch<{ provider: 'openai' | 'claude' | undefined }>('/api/provider')
-    provider.value = data.value?.provider ?? 'none'
+  function setProvider(p: 'openai' | 'claude' | 'none') {
+    provider.value = p
   }
 
-  async function recallContext(query: string) {
-    const { data } = await useFetch<MemoryItem[]>('/api/recall', {
-      params: { query }
-    })
-    memoryLog.value = (data.value || []).map(m => m.memory || '')
+  function recallContext(query: string) {
+    memoryLog.value = readMemoryLog(query)
+  }
+
+  async function initializeConversation() {
+    if (initialized.value) return
+    initialized.value = true
+
+    // Load local context and add as system message
+    const context = await getIntroContext()
+    if (context) {
+      messages.value.push({ role: 'assistant', content: context })
+    }
   }
 
   async function sendMessage(userInput: string) {
     messages.value.push({ role: 'user', content: userInput })
-    const { data: _data } = await useFetch('/api/store', {
+
+    const { data } = await useFetch<{ response: string }>('/api/chat', {
+      method: 'POST',
+      body: {
+        provider: provider.value,
+        messages: messages.value,
+      }
+    })
+
+    const reply = data.value?.response || 'Hmm... I couldn’t come up with a response.'
+    messages.value.push({ role: 'assistant', content: reply })
+
+    await useFetch('/api/store', {
       method: 'POST',
       body: {
         conversation: [
           { role: 'user', content: userInput },
-          { role: 'assistant', content: 'I’ll respond soon...' }
+          { role: 'assistant', content: reply }
         ],
         authenticity_level: 'high',
       }
     })
-    messages.value.push({ role: 'assistant', content: 'Stored!' })
   }
 
-  return { provider, messages, memoryLog, fetchProvider, recallContext, sendMessage }
+  onMounted(() => initializeConversation())
+
+  return {
+    provider,
+    messages,
+    memoryLog,
+    setProvider,
+    recallContext,
+    sendMessage,
+    initializeConversation
+  }
 })
+
+export type VeraStore = ReturnType<typeof useVeraStore>

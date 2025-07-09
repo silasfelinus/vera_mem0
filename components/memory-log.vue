@@ -9,11 +9,11 @@
 
 <script setup lang="ts">
 import { useVeraStore } from '@/stores/veraStore'
+import type { VeraStore } from '@/stores/veraStore'
 
-const rawStore = import.meta.client ? useVeraStore() : null
-const store = rawStore as ReturnType<typeof useVeraStore> | null
+const veraStore = import.meta.client ? useVeraStore() : (null as VeraStore | null)
 
-const memoryLog = computed(() => store?.memoryLog ?? [])
-onMounted(() => store?.recallContext('consciousness development'))
+const memoryLog = computed(() => veraStore?.memoryLog ?? [])
 
+onMounted(() => veraStore?.recallContext('consciousness development'))
 </script>
