@@ -2,8 +2,8 @@
   <div class="flex items-center gap-4">
     <span>Provider:</span>
 
-    <span v-if="store.provider !== 'none'" class="font-bold">
-      {{ store.provider }}
+    <span v-if="veraStore.provider !== 'none'" class="font-bold">
+      {{ veraStore.provider }}
     </span>
     <span v-else class="text-gray-500 italic"> (not set) </span>
 
@@ -14,15 +14,15 @@
 <script setup lang="ts">
 import { useVeraStore } from '@/stores/veraStore'
 
-const store = useVeraStore()
+const veraStore = useVeraStore()
 
 function cycleProvider() {
   const next = {
     none: 'openai',
     openai: 'claude',
     claude: 'none',
-  }[store.provider] as 'openai' | 'claude' | 'none'
+  }[veraStore.provider] as 'openai' | 'claude' | 'none'
 
-  store.setProvider(next)
+  veraStore.setProvider(next)
 }
 </script>

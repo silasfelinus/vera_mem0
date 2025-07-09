@@ -20,9 +20,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useVeraStore } from '@/stores/veraStore'
-import type { VeraStore } from '@/stores/veraStore'
 
-const veraStore = import.meta.client ? useVeraStore() : null as VeraStore | null
+const veraStore = useVeraStore()
 
 const messages = computed(() => veraStore?.messages ?? [])
 

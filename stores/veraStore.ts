@@ -18,20 +18,24 @@ export const useVeraStore = defineStore('vera', () => {
   }
 
 async function initializeConversation() {
-  if (initialized.value) return
+  if (initialized.value || !import.meta.client) return
   initialized.value = true
 
-  // ✅ Set default provider if not set
+  // Default provider
   if (provider.value === 'none') {
     provider.value = 'openai'
   }
 
-  // Load local context and add as system message
+  // Load intro context
   const context = await getIntroContext()
   if (context) {
     messages.value.push({ role: 'assistant', content: context })
   }
+
+  // Load memory log automatically
+  memoryLog.value = readMemoryLog('consciousness development')
 }
+
 
 
   async function sendMessage(userInput: string) {
@@ -73,4 +77,3 @@ async function initializeConversation() {
   }
 })
 
-export type VeraStore = ReturnType<typeof useVeraStore>
