@@ -18,6 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--provider", choices=["openai", "claude"], required=True)
 parser.add_argument("--user", required=False, help="Override USER_ID (Mem0 context)")
 args = parser.parse_args()
+provider = args.provider 
 
 # Load context identifiers
 env_user = os.getenv("USER_ID")
