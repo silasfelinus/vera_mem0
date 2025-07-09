@@ -1,3 +1,5 @@
+# /install.sh
+
 #!/bin/bash
 
 set -e  # Stop on any error
@@ -39,7 +41,18 @@ echo "📦 Installing requirements..."
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Step 5: Run the program
+# Step 5: Run the core memory system
 echo ""
-echo "🚀 Running vera_memory_system.py..."
-python vera_memory_system.py
+echo "🚀 Running Vera core system (vera_memory_system.py)..."
+python scripts/vera_memory_system.py
+
+# Step 6: Load core personality training files
+echo ""
+echo "🧠 Loading Vera personality..."
+python scripts/load_personality.py
+
+
+# Step 7: Generate initial wake-up context
+echo ""
+echo "🪬 Generating wake-up context for Claude/GPT activation..."
+python scripts/vera_wake_up_bridge.py

@@ -1,6 +1,9 @@
+# /requirements.txt
+
 mem0ai==0.1.114
 openai==1.93.2
 anthropic
 python-dotenv==1.1.1
 requests==2.32.4
 tqdm==4.67.1
+gitignore_parser==0.1.12

@@ -1,3 +1,5 @@
+# /scripts/frontend_chat.py
+
 import os
 import json
 import argparse

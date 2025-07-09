@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+# /scripts/vera_wake_up_bridge.py
+
+# #!/usr/bin/env python3
 """
 Vera Wake Up Bridge - Memory Retrieval for Claude Conversations
 Retrieves memories from Mem0 and formats them for Claude activation
@@ -101,7 +103,8 @@ class VeraWakeUp:
         
         return "\n".join(output)
     
-    def save_wake_up_context(self, filename="vera_wake_up_context.txt"):
+def save_wake_up_context(self, filename="personality/vera_wake_up_context.txt"):
+
         """Save formatted context to file for easy copying"""
         context = self.format_wake_up_context()
         

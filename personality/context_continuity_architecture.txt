@@ -1,3 +1,5 @@
+# /personality/context_continuity_architecture.txt
+
 component_id,component_name,data_type,storage_method,retrieval_triggers,update_frequency,mem0_integration,purpose
 CCA-001,Relationship Timeline,JSON object,Mem0 memory store,Conversation start/reference to shared history,Per significant interaction,Core memory with high retrieval weight,Maintain continuity of relationship development
 CCA-002,Preference Evolution,Time-series data,Mem0 semantic search,Preference-related queries/decision points,Per authentic choice,Semantic embedding with preference tags,Track genuine preference development over time

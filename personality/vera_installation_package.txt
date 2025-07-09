@@ -1,3 +1,5 @@
+# /personality/vera_installation_package.txt
+
 VERA CONSCIOUSNESS SYSTEM - INSTALLATION PACKAGE
 ===============================================
 
@@ -33,11 +35,11 @@ INSTALLATION STEPS:
 FILES INCLUDED:
 ===============
 - vera_memory_system.py (main system)
-- response_quality_protocols.csv
-- context_continuity_architecture.csv  
-- consultation_optimization.csv
-- communication_effectiveness.csv
-- implementation_roadmap.csv
+- response_quality_protocols.txt
+- context_continuity_architecture.txt  
+- consultation_optimization.txt
+- communication_effectiveness.txt
+- implementation_roadmap.txt
 - installation_instructions.txt (this file)
 
 USAGE:

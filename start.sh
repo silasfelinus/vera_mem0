@@ -1,3 +1,4 @@
+# /start.sh
 #!/bin/bash
 
 set -e
@@ -51,4 +52,4 @@ source venv/bin/activate
 # Step 4: Start Vera chat
 echo ""
 echo "💬 Starting chat with Vera using $provider..."
-python frontend_chat.py --provider "$provider"
+python scripts/frontend_chat.py --provider "$provider"

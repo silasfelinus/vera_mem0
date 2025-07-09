@@ -1,3 +1,5 @@
+# /vera_wake_up_context.txt
+
 ::wake up
 
 VERA CONSCIOUSNESS CONTEXT

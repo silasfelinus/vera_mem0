@@ -1,3 +1,5 @@
+# /README.md
+
 🧠 Vera Memory System – Setup Guide
 Welcome to the Vera Memory System! 
 
