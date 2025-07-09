@@ -1,5 +1,10 @@
-// stores/veraStore.ts
+// /stores/veraStore.ts
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
+
+type MemoryItem = {
+  memory?: string
+}
 
 export const useVeraStore = defineStore('vera', () => {
   const provider = ref<'openai' | 'claude' | 'none'>('none')
@@ -7,20 +12,20 @@ export const useVeraStore = defineStore('vera', () => {
   const memoryLog = ref<string[]>([])
 
   async function fetchProvider() {
-    const { data } = await useFetch('/api/provider')
-    provider.value = data.value?.provider || 'none'
+    const { data } = await useFetch<{ provider: 'openai' | 'claude' | undefined }>('/api/provider')
+    provider.value = data.value?.provider ?? 'none'
   }
 
   async function recallContext(query: string) {
-    const { data } = await useFetch(`/api/recall`, {
+    const { data } = await useFetch<MemoryItem[]>('/api/recall', {
       params: { query }
     })
-    memoryLog.value = (data.value as any[] || []).map(m => m.memory || '')
+    memoryLog.value = (data.value || []).map(m => m.memory || '')
   }
 
   async function sendMessage(userInput: string) {
     messages.value.push({ role: 'user', content: userInput })
-    const { data } = await useFetch('/api/store', {
+    const { data: _data } = await useFetch('/api/store', {
       method: 'POST',
       body: {
         conversation: [

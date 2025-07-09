@@ -12,6 +12,9 @@
 </template>
 
 <script setup lang="ts">
+import { useVeraStore } from '@/stores/veraStore'
+
+
 const store = useVeraStore()
 const input = ref('')
 function send() {

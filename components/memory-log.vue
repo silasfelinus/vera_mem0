@@ -8,6 +8,9 @@
 </template>
 
 <script setup lang="ts">
+import { useVeraStore } from '@/stores/veraStore'
+
+
 const store = useVeraStore()
 onMounted(() => store.recallContext('consciousness development'))
 </script>

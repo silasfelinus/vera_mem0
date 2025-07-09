@@ -2,17 +2,17 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-"scripts": {
-  "dev": "nuxt dev --host",
-  "build": "nuxt build",
-  "lint": "npm run lint:js && npm run lint:prettier",
-  "lint:js": "eslint .",
-  "lint:prettier": "prettier --check .",
-  "lintfix": "eslint --fix . && prettier --write .",
-  "typecheck": "vue-tsc --noEmit",
-  "test": "npm run typecheck",
-  "prettier": "prettier --write ."
-},
+  "scripts": {
+    "dev": "nuxt dev --host",
+    "build": "nuxt build",
+    "lint": "npm run lint:js && npm run lint:prettier",
+    "lint:js": "eslint .",
+    "lint:prettier": "prettier --check .",
+    "lintfix": "eslint --fix . && prettier --write .",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "npm run typecheck",
+    "prettier": "prettier --write ."
+  },
   "dependencies": {
     "@nuxt/content": "^3.6.3",
     "@nuxt/eslint": "^1.5.2",
@@ -22,6 +22,7 @@
     "@nuxt/ui": "^3.2.0",
     "better-sqlite3": "^12.2.0",
     "nuxt": "^3.17.6",
+    "pinia": "^3.0.3",
     "typescript": "^5.8.3",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
