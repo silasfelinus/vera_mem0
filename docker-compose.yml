@@ -5,12 +5,13 @@ services:
     container_name: vera_backend
     image: python:3.11-slim
     volumes:
-      - .:/ # Root of your project
-      - ./.env:/.env:ro
+      - .:/vera
+      - ./.env:/vera/.env:ro
     ports:
       - "46831:8000"
+    working_dir: /vera
     command: >
-      bash -c " chmod +x install.sh && ./install.sh && uvicorn api:app --host 0.0.0.0 --port 8000 "
+      bash -c "chmod +x install.sh && ./install.sh && uvicorn api:app --host 0.0.0.0 --port 8000"
 
   vera-frontend:
     container_name: vera_frontend
@@ -20,5 +21,6 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/ # Also root
-    command: npm dev
+      - .:/vera
+    working_dir: /vera
+    command: npm run dev

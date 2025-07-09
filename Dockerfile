@@ -1,9 +1,11 @@
 FROM node:18-alpine
 
+WORKDIR /vera
+
 COPY . .
 
-RUN corepack enable && pnpm install
+RUN npm install
 
 EXPOSE 3000
 
-CMD ["npm", "dev"]
+CMD ["npm", "run", "dev"]
