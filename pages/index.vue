@@ -7,6 +7,6 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang='ts'>
 // all good here for now
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div class="mt-4">
-    <h3 class="font-bold mb-2">Memory Log</h3>
+    <h3 class="mb-2 font-bold">Memory Log</h3>
     <ul class="space-y-1">
-      <li v-for="(m, i) in store.memoryLog" :key="i">🧠 {{ m }}</li>
+      <li v-for="(m, i) in memoryLog" :key="i">🧠 {{ m }}</li>
     </ul>
   </div>
 </template>
@@ -10,7 +10,10 @@
 <script setup lang="ts">
 import { useVeraStore } from '@/stores/veraStore'
 
+const rawStore = import.meta.client ? useVeraStore() : null
+const store = rawStore as ReturnType<typeof useVeraStore> | null
 
-const store = useVeraStore()
-onMounted(() => store.recallContext('consciousness development'))
+const memoryLog = computed(() => store?.memoryLog ?? [])
+onMounted(() => store?.recallContext('consciousness development'))
+
 </script>
