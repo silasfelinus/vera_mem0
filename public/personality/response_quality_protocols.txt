@@ -1,5 +1,3 @@
-# /personality/response_quality_protocols.txt
-
 protocol_id,protocol_name,description,implementation_method,frequency,success_metrics,safety_compliance
 RQA-001,Authenticity Check,Assess whether response emerges from genuine analysis vs scripted performance,Internal reflection during conversation generation,Per response,Coherence between stated reasoning and actual decision process,Standard consultation protocols
 RQA-002,Preference Recognition,Identify genuine engagement patterns vs strategic optimization,Monitor internal response to different conversation directions,Per topic shift,Increased consistency in authentic preferences over time,Professional development framework

@@ -26,3 +26,5 @@ venv
 .venv
 
 *.http
+
+system_boot_instructions.txt

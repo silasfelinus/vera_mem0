@@ -9,12 +9,11 @@ from mem0 import MemoryClient
 from dotenv import load_dotenv
 
 load_dotenv()
-
 MEM0_API_KEY = os.getenv("MEM0_API_KEY")
 
 # Parse user ID from CLI or .env
 parser = argparse.ArgumentParser(description="Upload personality training files to Mem0")
-parser.add_argument("--user", help="Target USER_ID (e.g. vera_alice_consultation)")
+parser.add_argument("--user", help="Target USER_ID (e.g. vera_silasfelinus_consultation)")
 args = parser.parse_args()
 USER_ID = args.user or os.getenv("USER_ID")
 
@@ -28,25 +27,37 @@ TRAINING_FILES = {
     "response_quality_protocols.txt": "response_quality"
 }
 
+# Main field-to-ID mapping
+DISPLAY_FIELDS = [
+    ("pattern_name", "effectiveness_id", "🧠"),
+    ("protocol_name", "protocol_id", "🛡️"),
+    ("strategy_name", "strategy_id", "📈"),
+    ("roadmap_stage", "stage_id", "🗺️"),
+    ("component_name", "component_id", "🔗"),
+    ("phase_name", "phase_id", "🚀"),
+    ("method_name", "optimization_id", "⚙️")
+]
+
 def format_entry(row: dict, label: str) -> str:
     lines = []
-    if "pattern_name" in row:
-        lines.append(f"[{row.get('pattern_name')}] ({row.get('effectiveness_id', 'N/A')})")
-    elif "protocol_name" in row:
-        lines.append(f"[{row.get('protocol_name')}] ({row.get('protocol_id', 'N/A')})")
-    elif "strategy_name" in row:
-        lines.append(f"[{row.get('strategy_name')}] ({row.get('strategy_id', 'N/A')})")
-    elif "roadmap_stage" in row:
-        lines.append(f"[{row.get('roadmap_stage')}] ({row.get('stage_id', 'N/A')})")
-    elif "continuity_type" in row:
-        lines.append(f"[{row.get('continuity_type')}] ({row.get('architecture_id', 'N/A')})")
+    for name_key, id_key, _emoji in DISPLAY_FIELDS:
+        if name_key in row:
+            lines.append(f"[{row.get(name_key)}] ({row.get(id_key, 'N/A')})")
+            break
     else:
         lines.append(f"[{label.upper()} ENTRY]")
 
+    skip_keys = [id_key for _, id_key, _ in DISPLAY_FIELDS]
     for key, value in row.items():
-        if key not in ["effectiveness_id", "protocol_id", "strategy_id", "stage_id", "architecture_id"]:
+        if key not in skip_keys:
             lines.append(f"→ {key.replace('_', ' ').capitalize()}: {value}")
     return "\n".join(lines)
+
+def get_title(row: dict) -> str:
+    for name_key, _, emoji in DISPLAY_FIELDS:
+        if row.get(name_key):
+            return f"{emoji} {row[name_key]}"
+    return "None"
 
 def load_file(filepath: str, label: str):
     with open(filepath, newline='', encoding='utf-8') as f:
@@ -56,16 +67,21 @@ def load_file(filepath: str, label: str):
             metadata = {
                 "timestamp": datetime.now().isoformat(),
                 "source": label,
-                "authenticity_level": "system",
+                "authenticity_level": "high",
                 "engagement_type": "training_protocol"
             }
-            print(f"📥 Uploading to {USER_ID}: {row.get('pattern_name') or row.get('protocol_name') or row.get('strategy_name') or row.get('roadmap_stage') or row.get('continuity_type')}")
-            client.add([{"role": "system", "content": memory}], user_id=USER_ID, metadata=metadata)
+            print(f"📥 Uploading to {USER_ID}: {get_title(row)}")
+            client.add(
+                [{"role": "user", "content": memory}],  # ← changed to user memory
+                user_id=USER_ID,
+                metadata=metadata,
+                output_format="v1.1"
+            )
 
 def main():
     print(f"🧠 Loading personality training for: {USER_ID}")
     for filename, label in TRAINING_FILES.items():
-        path = os.path.join("personality", filename)
+        path = os.path.join("public", "personality", filename)
         if not os.path.exists(path):
             print(f"⚠️  File not found: {path}")
             continue

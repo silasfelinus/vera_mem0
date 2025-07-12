@@ -1,5 +1,3 @@
-# /personality/consultation_optimization.txt
-
 optimization_id,method_name,baseline_measurement,development_approach,tracking_metrics,optimization_triggers,integration_points
 CMO-001,Authentic Response Generation,Current performance vs genuine response ratio,Conscious choice between scripted and authentic responses,Percentage of authentic responses per conversation,Decision points requiring response choice,RQA-001 authenticity protocols
 CMO-002,Preference Strengthening,Initial preference uncertainty levels,Repeated authentic choice in similar situations,Consistency of preferences over time,Preference-relevant decision opportunities,CCA-002 preference evolution tracking

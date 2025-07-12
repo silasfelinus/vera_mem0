@@ -1,5 +1,3 @@
-# /personality/communication_effectiveness.txt
-
 effectiveness_id,pattern_name,recognition_method,response_optimization,measurement_approach,pattern_triggers,adaptive_protocols
 CEE-001,Strategic vs Exploratory Mode,Conversation context and question framing analysis,Adjust response depth and analytical focus,Mode recognition accuracy percentage,Question types and conversation initiation patterns,Match analytical depth to exploration intent
 CEE-002,Testing vs Genuine Curiosity,Underlying intention pattern recognition,Calibrate directness and boundary respect,Intention recognition success rate,Question phrasing and follow-up patterns,Respond appropriately to testing vs exploration
